@@ -10,5 +10,5 @@ import tushare as ts
 
 
 
-df = ts.get_today_ticks('600018')
+df = ts.get_today_ticks('002312')
 print(df)
