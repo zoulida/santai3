@@ -7,11 +7,18 @@ from sqlalchemy import create_engine
 import pandas as pd
 from pandas import Series, DataFrame
 
+import numpy as np
+#import pandas as pd
+
+
 data = {"name":["yahoo","google","facebook"], "marks":[200,400,800], "price":[9, 3, 7]}
-f1 = DataFrame(data)
+f1 = pd.DataFrame(data)
+#fl.head()
+
+
 
 print(f1)
-f1["price"]=[ 'dd % i' % i for i in f1["price"]]
+f1["price"]=[ '%d ' %(i) for i in f1["price"]]
 print(f1)
 print(f1["price"])
 
