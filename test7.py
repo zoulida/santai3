@@ -30,8 +30,8 @@ code = getStackCode(getHtml(Url))
 # 获取所有股票代码（以6/3/0开头的，应该是沪市数据）集合
 CodeList = []
 for item in code:
-    if item[0] == '6':
-        CodeList.append(item)
+    #if item[0] == '6':
+    #    CodeList.append(item)
     if item[0] == '0':
         CodeList.append(item)
     if item[0] == '3':
@@ -54,7 +54,7 @@ for code in CodeList:
     if int(code[0]) == 3:
         url2 = 'http://quotes.money.163.com/service/chddata.html?code=1' + code + '&start=' + startstr + "&end=" + endstr +\
               '&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
-    if int(code[0]) == 6 or 0:
+    if int(code[0]) == 6 or int(code[0]) == 0:
         #print("*********")
         url2 = 'http://quotes.money.163.com/service/chddata.html?code=0' + code + '&start=' + startstr + "&end=" + endstr +\
               '&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
