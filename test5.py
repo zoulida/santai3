@@ -5,6 +5,7 @@ import pandas as pd
 import pymysql
 import os
 import time
+import traceback
 
 # 爬虫抓取网页函数
 def getHtml(url):
@@ -36,9 +37,18 @@ for code in CodeList:
     if int(code )  >600010:
         continue
     print('正在获取股票%s数据' % code)
-    url = 'http://quotes.money.163.com/service/chddata.html?code=0' + code + \
-          '&end=20181231&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
-    urllib.request.urlretrieve(url, filepath + code + '.csv')
+    import datetime
+    today=datetime.date.today()
+    z30daysago = today + datetime.timedelta(days=-30)
+    #startstr='19900101'
+    startstr=str(z30daysago.strftime('%Y%m%d'))
+    endstr = str(today.strftime('%Y%m%d'))
+    #url = 'http://quotes.money.163.com/service/chddata.html?code=0' + code + \
+    #      '&end=20181231&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
+    url2 = 'http://quotes.money.163.com/service/chddata.html?code=0' + code + '&start=' + startstr + "&end=" + endstr +\
+          '&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
+    print(url2)
+    urllib.request.urlretrieve(url2, filepath + code + '.csv')
 
 ##########################将股票数据存入数据库###########################
 
@@ -50,7 +60,10 @@ db = pymysql.connect('localhost', name, password, charset='utf8')
 cursor = db.cursor()
 # 创建数据库stockDataBase
 sqlSentence1 = "create database stockDataBase"
-#cursor.execute(sqlSentence1)  # 选择使用当前数据库
+try:
+    cursor.execute(sqlSentence1)  # 选择使用当前数据库
+except:
+    print("数据库已经存在，无法再次创建");
 sqlSentence2 = "use stockDataBase;"
 cursor.execute(sqlSentence2)
 
@@ -74,6 +87,10 @@ data = pd.read_csv(filepath + fileName, encoding="gbk")
 sqlSentence3 = "create table stock_%s" % fileName[0:6] + "(timeStamp bigint, 日期 date, 股票代码 VARCHAR(10),     名称 VARCHAR(10),\
                        收盘价 float,    最高价    float, 最低价 float, 开盘价 float, 前收盘 float, 涨跌额    float, \
                        涨跌幅 float, 换手率 float, 成交量 bigint, 成交金额 bigint, 总市值 bigint, 流通市值 bigint, primary key(timeStamp))"
+try:
+    cursor.execute(sqlSentence3)  # 选择使用当前数据库
+except:
+    print("数据表stock_%s" % fileName[0:6] + "已经存在，无法再次创建");
 #cursor.execute(sqlSentence3)
 
 # 迭代读取表中每行数据，依次存储（整表存储还没尝试过）
@@ -98,9 +115,9 @@ for i in range(0, length):
         #sqlZld3 = sqlZld2 + sqlSentence4
         print(sqlSentence4)
         cursor.execute(sqlSentence4)
-    except :
+    except Exception as e:
+        print( 'traceback.print_exc():', traceback.print_exc())
         # 如果以上插入过程出错，跳过这条数据记录，继续往下进行
-
         continue #break
 
 # 关闭游标，提交，关闭数据库连接
