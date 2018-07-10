@@ -1,6 +1,6 @@
 import tushare as ts
 import os
-import mkdir
+from tools import mkdir
 
 mkdir.mkdirA("d:/day")
 
