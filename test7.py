@@ -34,7 +34,7 @@ for item in code:
     #    CodeList.append(item)
     if item[0] == '0':
         CodeList.append(item)
-    if item[0] == '3':
+    #if item[0] == '3':
         CodeList.append(item)
 # 抓取数据并保存到本地csv文件
 for code in CodeList:
@@ -51,10 +51,10 @@ for code in CodeList:
     #      '&end=20181231&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
     #url2 = "url出错"
     #print(code[0])
-    if int(code[0]) == 3:
+    if int(code[0]) == 3 or int(code[0]) == 0:
         url2 = 'http://quotes.money.163.com/service/chddata.html?code=1' + code + '&start=' + startstr + "&end=" + endstr +\
               '&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
-    if int(code[0]) == 6 or int(code[0]) == 0:
+    if int(code[0]) == 6 :
         #print("*********")
         url2 = 'http://quotes.money.163.com/service/chddata.html?code=0' + code + '&start=' + startstr + "&end=" + endstr +\
               '&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
