@@ -32,10 +32,10 @@ def toCVS(filepath, isalldate=False ):
     for item in code:
         if item[0] == '6':
             CodeList.append(item)
-        #if item[0] == '0':
-            #CodeList.append(item)
-        #if item[0] == '3':
-            #CodeList.append(item)
+        if item[0] == '0':
+            CodeList.append(item)
+        if item[0] == '3':
+            CodeList.append(item)
     # 抓取数据并保存到本地csv文件
     for code in CodeList:
         #if int(code )  >600001 or int(code )<300000:
@@ -62,8 +62,14 @@ def toCVS(filepath, isalldate=False ):
             url2 = 'http://quotes.money.163.com/service/chddata.html?code=0' + code + '&start=' + startstr + "&end=" + endstr +\
                   '&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
         print(url2)
+        try:
+            urllib.request.urlretrieve(url2, filepath + code + '.csv')
+            time.sleep(1)
+        except Exception as e:
+            print('traceback.print_exc():', traceback.print_exc())
+            print("服务器拒绝，休息20秒")
+            time.sleep(20)
 
-        urllib.request.urlretrieve(url2, filepath + code + '.csv')
 
 
 
@@ -164,23 +170,23 @@ def queryMySQL():
 
 
 
+def main():
+    # 爬取程序，每天存储一个文件夹。
+    filepath = 'd:\\data\\'  # 定义数据文件保存路径
+    import datetime
+    today = datetime.date.today()
+    todaystr = str(today.strftime('%Y%m%d'))
+    filepath = filepath + todaystr + "\\"
+    print(filepath)
+    from tools import mkdir
+
+    mkdir.mkdirA(filepath)
+    toCVS(filepath, isalldate=False)
+
+    # 存储数据库
+    toMySQL(filepath)
 
 
 
-#爬取程序，每天存储一个文件夹。
-filepath = 'd:\\data\\'  # 定义数据文件保存路径
-import datetime
-today=datetime.date.today()
-todaystr = str(today.strftime('%Y%m%d'))
-filepath= filepath + todaystr +"\\"
-print(filepath)
-from tools import mkdir
 
-mkdir.mkdirA(filepath)
-toCVS(filepath, isalldate = False)
-
-
-
-#存储数据库
-toMySQL(filepath)
-
+main()
