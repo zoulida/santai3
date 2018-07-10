@@ -32,9 +32,9 @@ CodeList = []
 for item in code:
     #if item[0] == '6':
     #    CodeList.append(item)
-    if item[0] == '0':
-        CodeList.append(item)
-    #if item[0] == '3':
+    #if item[0] == '0':
+    #    CodeList.append(item)
+    if item[0] == '3':
         CodeList.append(item)
 # 抓取数据并保存到本地csv文件
 for code in CodeList:
