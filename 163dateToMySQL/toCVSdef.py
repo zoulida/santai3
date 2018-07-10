@@ -171,6 +171,11 @@ def queryMySQL():
 
 
 def main():
+    import logging
+    # define the log file, file mode and logging level
+    logging.basicConfig(filename='dayStockData.log', filemode="w", level=logging.DEBUG)
+    logging.debug('开始爬取数据。Getting Stock data from 163.')
+
     # 爬取程序，每天存储一个文件夹。
     filepath = 'd:\\data\\'  # 定义数据文件保存路径
     import datetime
