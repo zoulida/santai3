@@ -169,7 +169,7 @@ def queryMySQL():
 
 
 
-
+###################
 def main():
     import logging
     # define the log file, file mode and logging level
