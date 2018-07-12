@@ -40,8 +40,8 @@ def toCVS(filepath, isalldate=False ):
     for code in CodeList:
         #if int(code )  >600001 or int(code )<300000:
         #    continue
-        if int(code )  > 600005 :
-            continue
+        #if int(code )  > 600005 :
+        #    continue
         print('正在获取股票%s数据' % code)
         import datetime
         today=datetime.date.today()
