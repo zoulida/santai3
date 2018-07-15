@@ -6,9 +6,9 @@ import time
 #前置必备代码
 import sys
 import os
-print( os.getcwd())
+print( "当前工作路径",os.getcwd())
 sys.path.append(os.getcwd())
-print(sys.path)
+#print(sys.path)
 
 
 
@@ -16,8 +16,8 @@ def job1():
     print("I'm working for job1")
     time.sleep(2)
     print("job1:", datetime.datetime.now())
-    import toCVSdef
-    toCVSdef.main()
+    import toCSVdef
+    toCSVdef.main()
 
 
 
