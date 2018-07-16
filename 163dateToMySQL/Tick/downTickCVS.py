@@ -44,14 +44,14 @@ def get_save_tick_data(symbol, date):
             os.makedirs(dir)
         if not os.path.exists(file):
             try:
-                df=ts.get_tick_data(symbol,str_date,pause=0.1)
+                df=ts.get_tick_data(symbol,str_date,pause=0.1,src='tt')
             except IOError as msg:
                 print (str(msg))#.decode('UTF-8'))
                 sleep_time=min(sleep_time*2, 128)#每次下载失败后sleep_time翻倍，但是最大128s
                 print ('Get tick data error: symbol: '+ symbol + ', date: '+str_date+', sleep time is: '+str(sleep_time))
                 return res
             else:
-                print(df)
+                #print(df)
                 df.to_csv(file)
 
                 toMySQL(df,date,symbol)
@@ -86,7 +86,7 @@ def get_all_stock_id():
 def toMySQL(df,date,symbol):
     print("ToDo sth")
     from tools import connectMySQL
-    cursor, db = connectMySQL.getTickCursor()
+    cursor, db = connectMySQL.getTickCursorAndDB()#getTickCursor()
 
     #print(df.keys())
 
@@ -96,7 +96,7 @@ def toMySQL(df,date,symbol):
                            tick_time time DEFAULT NULL, price float,    \
                            changeA float, volume bigint, amount bigint, type VARCHAR(10),  primary key(timeStamp))"
     try:
-        cursor.execute(sqlSentence3)  # 选择使用当前数据库
+        cursor.execute(sqlSentence3)
     except Exception as msg:
         #print (str(msg))
         print("数据表stock_%s" % symbol + "已经存在，无法再次创建");
@@ -111,10 +111,10 @@ def toMySQL(df,date,symbol):
             tsp = 456456464654564
 
             sqlSentence4 = "insert IGNORE  into tick_%s" % symbol + \
-                           "(timestamp, 日期, 股票代码, 名称, tick_time, price, changeA, volume, amount, type, )" \
+                           "(timestamp, 日期, 股票代码, 名称, tick_time, price, changeA, volume, amount, type )" \
                            " values ('%s'," % tsp + "'%s',"%date + "'%s',"%symbol + "'%s',"%symbol + "'%s',"%getattr(row, "time") +\
                            "'%s',"%getattr(row, "price") + "'%s',"%getattr(row, "change") + "'%s',"%getattr(row, "volume") +\
-                           "'%s',"%getattr(row, "amount") + "'%s',"%getattr(row, "type") +")"
+                           "'%s',"%getattr(row, "amount") + "'%s'" %getattr(row, "type") +")"
 
             # 获取的表中数据很乱，包含缺失值、Nnone、none等，插入数据库需要处理成空值
             sqlSentence4 = sqlSentence4.replace('nan', 'null').replace('None', 'null').replace('none', 'null')
@@ -134,7 +134,7 @@ def toMySQL(df,date,symbol):
 
 # 从TuShare下载感兴趣的所有股票的历史成交数据，并保存到本地HDF5压缩文件
 # dates=get_date_list(datetime.date(2017,11,6), datetime.date(2017,11,12))
-dates = get_date_list(datetime.date(2017, 10, 30), datetime.date(2017, 11, 4))
+dates = get_date_list(datetime.date(2018, 6, 30), datetime.date(2018, 7, 16))
 stocks = get_all_stock_id()
 print(stocks)
 for stock in stocks:
