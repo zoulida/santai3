@@ -6,6 +6,7 @@ import time
 import tushare as ts
 import os
 import traceback
+import logging
 
 data_dir = 'E:\\stock_data\\tick_CVS_data\\'  # 下载数据的存放路径
 
@@ -30,7 +31,7 @@ def is_open_day(date):
 #从TuShare获取tick data数据并保存到本地
 #@symbol: str类型股票代码 eg.600030
 #@date: date类型日期
-def get_save_tick_data(symbol, date):
+def get_save_tick_data(symbol, date, name):
 
     #print(date,symbol)
     global sleep_time,data_dir
@@ -54,14 +55,14 @@ def get_save_tick_data(symbol, date):
                 #print(df)
                 df.to_csv(file)
 
-                toMySQL(df,date,symbol)
+                toMySQL(df, date, symbol, name)
 
                 sleep_time=max(sleep_time/2, 2) #每次成功下载后sleep_time变为一半，但是至少2s
                 print ("Successfully download and save file: "+file+', sleep time is: '+str(sleep_time))
                 return res
         else:
             print ("Data already downloaded before, skip " + file)
-            res=False
+            res = False
             return res
 
 
@@ -86,11 +87,11 @@ def get_all_stock_id():
 
 def get_all_stock():
     stock_info = ts.get_stock_basics()
-    print(stock_info)
+    #print(stock_info)
     return  stock_info
 
 
-def toMySQL(df,date,symbol):
+def toMySQL(df, date, symbol, name):
     #print("ToDo sth")
     from tools import connectMySQL
     cursor, db = connectMySQL.getTickCursorAndDB()#getTickCursor()
@@ -121,7 +122,7 @@ def toMySQL(df,date,symbol):
 
             sqlSentence4 = "insert IGNORE  into tick_%s" % symbol + \
                            "(timestamp, 日期, 股票代码, 名称, tick_time, price, changeA, volume, amount, type )" \
-                           " values ('%s'," % tsp + "'%s',"%date + "'%s',"%symbol + "'%s',"%symbol + "'%s',"%getattr(row, "time") +\
+                           " values ('%s'," % tsp + "'%s',"%date + "'%s',"%symbol + "'%s',"%name + "'%s',"%getattr(row, "time") +\
                            "'%s',"%getattr(row, "price") + "'%s',"%getattr(row, "change") + "'%s',"%getattr(row, "volume") +\
                            "'%s',"%getattr(row, "amount") + "'%s'" %getattr(row, "type") +")"
 
@@ -142,15 +143,40 @@ def toMySQL(df,date,symbol):
 
 
 # 从TuShare下载感兴趣的所有股票的历史成交数据，并保存到本地HDF5压缩文件
-# dates=get_date_list(datetime.date(2017,11,6), datetime.date(2017,11,12))
-dates = get_date_list(datetime.date(2018, 6, 30), datetime.date(2018, 7, 16))
-stocks = get_all_stock_id()
-#stocks = get_all_stock()
+# define the log file, file mode and logging level
+logging.basicConfig(filename='TickData.log', filemode="w", level=logging.DEBUG)
+# 定义一个Handler打印INFO及以上级别的日志到sys.stderr
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+# 设置日志打印格式
+formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+console.setFormatter(formatter)
+# 将定义好的console日志handler添加到root logger
+logging.getLogger().addHandler(console)
 
-print(stocks)
-for stock in stocks:
+logging.debug('开始爬取数据。Getting tick data from Tecent.')
+
+import datetime
+today=datetime.date.today()
+z30daysago = today + datetime.timedelta(days=-30)
+#dates = get_date_list(datetime.date(2018, 6, 30), datetime.date(2018, 7, 16))
+dates = get_date_list(z30daysago, today)
+#stocks = get_all_stock_id()
+stocks = get_all_stock()
+
+#print(stocks)
+for row in stocks.itertuples(index=True, name='Pandas'):
+    #print(row)
+    print(getattr(row, "Index"), getattr(row, "name"))
+    #logging.debug("%s,%s" %(getattr(row, "Index"), getattr(row, "name")))
     for date in dates:
-        if get_save_tick_data(stock, date):
+        print(date)
+        if get_save_tick_data(getattr(row, "Index"), date, getattr(row, "name")):
             time.sleep(sleep_time)
+# for stock in stocks:
+#     print("stock: ",stock)
+#     for date in dates:
+#         #if get_save_tick_data(stock, date):
+#             time.sleep(sleep_time)
 
 
