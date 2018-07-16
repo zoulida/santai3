@@ -51,7 +51,7 @@ def get_save_tick_data(symbol, date):
                 print ('Get tick data error: symbol: '+ symbol + ', date: '+str_date+', sleep time is: '+str(sleep_time))
                 return res
             else:
-                #print(df)
+                print(df)
                 df.to_csv(file)
 
                 toMySQL(df,date,symbol)
@@ -86,7 +86,7 @@ def get_all_stock_id():
 def toMySQL(df,date,symbol):
     print("ToDo sth")
     from tools import connectMySQL
-    cursor = connectMySQL.getTickCursor()
+    cursor, db = connectMySQL.getTickCursor()
 
     #print(df.keys())
 
