@@ -5,6 +5,7 @@ import datetime
 import time
 import tushare as ts
 import os
+import traceback
 
 data_dir = 'E:\\stock_data\\tick_CVS_data\\'  # 下载数据的存放路径
 
@@ -53,7 +54,7 @@ def get_save_tick_data(symbol, date):
                 #print(df)
                 df.to_csv(file)
 
-                toMySQL("")
+                toMySQL(df,date,symbol)
 
                 sleep_time=max(sleep_time/2, 2) #每次成功下载后sleep_time变为一半，但是至少2s
                 print ("Successfully download and save file: "+file+', sleep time is: '+str(sleep_time))
@@ -82,8 +83,53 @@ def get_all_stock_id():
     stock_info = ts.get_hs300s()
     return stock_info['code'].values
 
-def toMySQL(formfilepath):
+def toMySQL(df,date,symbol):
     print("ToDo sth")
+    from tools import connectMySQL
+    cursor = connectMySQL.getTickCursor()
+
+    #print(df.keys())
+
+    #创建数据表
+    print("正在创建数据表" + symbol)
+    sqlSentence3 = "create table tick_%s" % symbol + "(timeStamp bigint, 日期 date, 股票代码 VARCHAR(10),  名称 VARCHAR(10),\
+                           tick_time time DEFAULT NULL, price float,    \
+                           changeA float, volume bigint, amount bigint, type VARCHAR(10),  primary key(timeStamp))"
+    try:
+        cursor.execute(sqlSentence3)  # 选择使用当前数据库
+    except Exception as msg:
+        #print (str(msg))
+        print("数据表stock_%s" % symbol + "已经存在，无法再次创建");
+
+
+    for row in df.itertuples(index=True, name='Pandas'):
+        print(getattr(row, "price"), getattr(row, "volume"))
+        #print(row)
+        try:
+            #struct_time = time.strptime(record[0], '%Y-%m-%d')
+            #tsp = int(time.mktime(struct_time))
+            tsp = 456456464654564
+
+            sqlSentence4 = "insert IGNORE  into tick_%s" % symbol + \
+                           "(timestamp, 日期, 股票代码, 名称, tick_time, price, changeA, volume, amount, type, )" \
+                           " values ('%s'," % tsp + "'%s',"%date + "'%s',"%symbol + "'%s',"%symbol + "'%s',"%getattr(row, "time") +\
+                           "'%s',"%getattr(row, "price") + "'%s',"%getattr(row, "change") + "'%s',"%getattr(row, "volume") +\
+                           "'%s',"%getattr(row, "amount") + "'%s',"%getattr(row, "type") +")"
+
+            # 获取的表中数据很乱，包含缺失值、Nnone、none等，插入数据库需要处理成空值
+            sqlSentence4 = sqlSentence4.replace('nan', 'null').replace('None', 'null').replace('none', 'null')
+
+            print(sqlSentence4)
+            cursor.execute(sqlSentence4)
+        except Exception as e:
+            print('traceback.print_exc():', traceback.print_exc())
+            # 如果以上插入过程出错，跳过这条数据记录，继续往下进行
+            continue  # break
+
+    # 关闭游标，提交，关闭数据库连接
+    cursor.close()
+    db.commit()
+    db.close()
 
 
 # 从TuShare下载感兴趣的所有股票的历史成交数据，并保存到本地HDF5压缩文件
