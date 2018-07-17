@@ -97,7 +97,7 @@ def get_all_stock():
 
 
 def toMySQL(df, date, symbol, name):
-    
+
     from tools import connectMySQL
     cursor, db = connectMySQL.getTickCursorAndDB()#getTickCursor()
 

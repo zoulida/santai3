@@ -1,2 +1,2 @@
-python 163dateToMySQL/scheduleStockSave.py
+python data163ToMySQL/scheduleStockSave.py
 cmd
