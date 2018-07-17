@@ -65,6 +65,7 @@ def run():
 
 
         job1_task()
+        time.sleep(7000)
         job2_task()
         time.sleep(60)
 
