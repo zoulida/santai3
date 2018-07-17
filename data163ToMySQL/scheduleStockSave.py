@@ -16,8 +16,8 @@ def job1():
     print("I'm working for job1")
     time.sleep(2)
     print("job1:", datetime.datetime.now())
-    import toCSVdef
-    toCSVdef.main()
+    import data163ToMySQL.toCSVdef as csv
+    csv.main()
 
 
 
@@ -26,6 +26,8 @@ def job2():
     print("I'm working for job2")
     time.sleep(2)
     print("job2:", datetime.datetime.now())
+    import data163ToMySQL.Tick.downTickCVS3 as tk
+    tk.main()
 
 
 def job1_task():
@@ -45,7 +47,7 @@ def run():
     while True:
         #schedule.run_pending()
         #time.sleep(1)
-
+        job2_task()
         while True:
             # 不到时间就等20秒之后再次检测
             time.sleep(5)
@@ -63,6 +65,7 @@ def run():
 
 
         job1_task()
+        job2_task()
         time.sleep(60)
 
 def main():
