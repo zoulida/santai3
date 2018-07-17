@@ -138,8 +138,8 @@ def toMySQL(df, date, symbol, name):
             sqlSentence4 = sqlSentence4.replace('nan', 'null').replace('None', 'null').replace('none', 'null')
 
             time3 = time.strptime(getattr(row, "time"), '%H:%M:%S')
-            #if time3.tm_hour == 15:
-            logger.debug(sqlSentence4)
+            if time3.tm_hour == 15:
+                logger.debug(sqlSentence4)
             cursor.execute(sqlSentence4)
         except Exception as e:
             print('traceback.print_exc():', traceback.print_exc())
