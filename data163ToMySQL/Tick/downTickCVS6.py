@@ -105,9 +105,12 @@ def toMySQL(df, date, symbol, name):
 
     #创建数据表
     logger.info("正在创建数据表" + symbol)
+    # sqlSentence3 = "create table tick_%s" % symbol + "(timeStamp bigint, 日期 date, 股票代码 VARCHAR(10),  名称 VARCHAR(10),\
+    #                        tick_time time DEFAULT NULL, price float,    \
+    #                        changeA float, volume bigint, amount bigint, type VARCHAR(10),  primary key(timeStamp))"
     sqlSentence3 = "create table tick_%s" % symbol + "(timeStamp bigint, 日期 date, 股票代码 VARCHAR(10),  名称 VARCHAR(10),\
-                           tick_time time DEFAULT NULL, price float,    \
-                           changeA float, volume bigint, amount bigint, type VARCHAR(10),  primary key(timeStamp))"
+                               tick_time time DEFAULT NULL, price float,    \
+                               changeA float, volume bigint, amount bigint, type VARCHAR(10),  INDEX(timeStamp))"
     try:
         cursor.execute(sqlSentence3)
     except Exception as msg:
