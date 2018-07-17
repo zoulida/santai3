@@ -115,7 +115,7 @@ def toMySQL(df, date, symbol, name):
         cursor.execute(sqlSentence3)
     except Exception as msg:
         #print (str(msg))
-        logger.info("数据表stock_%s" % symbol + "已经存在，无法再次创建");
+        logger.info("数据表tick_%s" % symbol + "已经存在，无法再次创建");
 
 
     for row in df.itertuples(index=True, name='Pandas'):
