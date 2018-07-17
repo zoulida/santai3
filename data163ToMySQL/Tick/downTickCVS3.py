@@ -32,7 +32,7 @@ def is_open_day(date):
 #@symbol: str类型股票代码 eg.600030
 #@date: date类型日期
 def get_save_tick_data(symbol, date, name):
-
+    logger.info("开始下载%s,%s,%s"%(symbol, date, name))
     #print(date,symbol)
     global sleep_time,data_dir
     sleep_time=2
@@ -51,14 +51,14 @@ def get_save_tick_data(symbol, date, name):
                     raise IOError('下载的df为空')
 
             except IOError as msg:
-                print (str(msg))#.decode('UTF-8'))
+                logger.info (str(msg))#.decode('UTF-8'))
                 sleep_time=min(sleep_time*2, 128)#每次下载失败后sleep_time翻倍，但是最大128s
-                print ('Get tick data error: symbol: '+ symbol + ', date: '+str_date+', sleep time is: '+str(sleep_time))
+                logger.info ('Get tick data error: symbol: '+ symbol + ', date: '+str_date+', sleep time is: '+str(sleep_time))
                 return res
             else:
                 #print(df)
                 df.to_csv(file)
-                print ("Successfully download and save file: "+file+', sleep time is: '+str(sleep_time))
+                logger.info ("Successfully download and save file: "+file+', sleep time is: '+str(sleep_time))
 
                 toMySQL(df, date, symbol, name)
 
@@ -66,7 +66,7 @@ def get_save_tick_data(symbol, date, name):
 
                 return res
         else:
-            print ("Data already downloaded before, skip " + file)
+            logger.info ("Data already downloaded before, skip " + file)
             res = False
             return res
 
@@ -104,7 +104,7 @@ def toMySQL(df, date, symbol, name):
     #print(df.keys())
 
     #创建数据表
-    print("正在创建数据表" + symbol)
+    logger.info("正在创建数据表" + symbol)
     sqlSentence3 = "create table tick_%s" % symbol + "(timeStamp bigint, 日期 date, 股票代码 VARCHAR(10),  名称 VARCHAR(10),\
                            tick_time time DEFAULT NULL, price float,    \
                            changeA float, volume bigint, amount bigint, type VARCHAR(10),  primary key(timeStamp))"
@@ -112,7 +112,7 @@ def toMySQL(df, date, symbol, name):
         cursor.execute(sqlSentence3)
     except Exception as msg:
         #print (str(msg))
-        print("数据表stock_%s" % symbol + "已经存在，无法再次创建");
+        logger.info("数据表stock_%s" % symbol + "已经存在，无法再次创建");
 
 
     for row in df.itertuples(index=True, name='Pandas'):
@@ -134,7 +134,9 @@ def toMySQL(df, date, symbol, name):
             # 获取的表中数据很乱，包含缺失值、Nnone、none等，插入数据库需要处理成空值
             sqlSentence4 = sqlSentence4.replace('nan', 'null').replace('None', 'null').replace('none', 'null')
 
-            print(sqlSentence4)
+            time3 = time.strptime(getattr(row, "time"), '%H:%M:%S')
+            if time3.tm_hour == 15:
+                logger.debug(sqlSentence4)
             cursor.execute(sqlSentence4)
         except Exception as e:
             print('traceback.print_exc():', traceback.print_exc())
@@ -146,9 +148,12 @@ def toMySQL(df, date, symbol, name):
     db.commit()
     db.close()
 
+
+from tools.LogTools import Logger
+logger = Logger(logName='log.txt', logLevel="DEBUG", logger="downTickCVS3.py").getlog()
+
 def main():
-    from tools.LogTools import Logger
-    logger = Logger(logName='log.txt', logLevel="DEBUG", logger="downTickCVS3.py").getlog()
+
 
     logger.debug('开始爬取数据。Getting tick data from Tecent.')
 
@@ -163,10 +168,10 @@ def main():
     #print(stocks)
     for row in stocks.itertuples(index=True, name='Pandas'):
         #print(row)
-        print(getattr(row, "Index"), getattr(row, "name"))
+        #print(getattr(row, "Index"), getattr(row, "name"))
         #logging.debug("%s,%s" %(getattr(row, "Index"), getattr(row, "name")))
         for date in dates:
-            print(date)
+            #print(date)
             if get_save_tick_data(getattr(row, "Index"), date, getattr(row, "name")):
                 time.sleep(sleep_time)
 
