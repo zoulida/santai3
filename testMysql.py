@@ -1,27 +1,31 @@
 __author__ = 'Administrator'
 
-from sqlalchemy import create_engine
+from tools.LogTools import Logger
+logger = Logger(logName='log.txt', logLevel="DEBUG", logger="downTickCVS3.py").getlog()
 
-#engine = create_engine('mysql://root:root@127.0.0.1/stockdata0?charset=utf8')
+from tools import connectMySQL
+cursor, db = connectMySQL.getTickCursorAndDB()#getTickCursor()
 
-import pandas as pd
-from pandas import Series, DataFrame
+#print(df.keys())
 
-import numpy as np
-#import pandas as pd
+#创建数据表
+logger.info("正在创建数据表" + "ErrorInfo")
 
+sqlSentence3 = "create table ErrorInfo" + "(股票代码 VARCHAR(10), 第一次出错日期 date, 连续出错次数 bigint DEFAULT 0,  名称 VARCHAR(10),\
+                           weight float,  primary key(股票代码) )"
 
-data = {"name":["yahoo","google","facebook"], "marks":[200,400,800], "price":[9, 3, 7]}
-f1 = pd.DataFrame(data)
-#fl.head()
-
-
-
-print(f1)
-f1["price"]=[ '%d ' %(i) for i in f1["price"]]
-print(f1)
-print(f1["price"])
-
+print(sqlSentence3)
+try:
+    cursor.execute(sqlSentence3)
+except Exception as msg:
+    #print (str(msg))
+    logger.info("数据表ErrorInfo"  + "已经存在，无法再次创建");
 
 
-#df.to_sql('tick_data',engine,if_exists='append')
+
+updateSentence ="INSERT INTO ErrorInfo(股票代码, 第一次出错日期, 名称, weight) VALUE('100001','2017-7-24' ,'小李','666') ON DUPLICATE KEY UPDATE 名称= '小张',weight=weight+1"
+cursor.execute(updateSentence)
+print(updateSentence)
+cursor.close()
+db.commit()
+db.close()

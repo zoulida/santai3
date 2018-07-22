@@ -26,7 +26,7 @@ def job2():
     print("I'm working for job2")
     time.sleep(2)
     print("job2:", datetime.datetime.now())
-    import data163ToMySQL.Tick.downTickCVS6 as tk
+    import data163ToMySQL.Tick.downTickCVS7 as tk
     tk.main()
 
 
