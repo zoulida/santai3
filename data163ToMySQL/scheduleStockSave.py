@@ -60,8 +60,8 @@ def run():
 
                 break
 
-
-            print("Wait for running at ", h, ':', m, " every day." )
+            nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            print("Wait for running at ", h, ':', m, " every day. Now time is %s" %nowTime)
 
 
         job1_task()
