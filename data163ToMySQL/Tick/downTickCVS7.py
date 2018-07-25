@@ -54,7 +54,7 @@ def get_save_tick_data(symbol, date, name):
                 logger.info (str(msg))#.decode('UTF-8'))
                 sleep_time=min(sleep_time*2, 128)#每次下载失败后sleep_time翻倍，但是最大128s
                 logger.info ('Get tick data error: symbol: '+ symbol + ', date: '+str_date+', sleep time is: '+str(sleep_time))
-                import logErrorToMySQL as em
+                import data163ToMySQL.Tick.logErrorToMySQL as em
                 em.ErrortoDataBase(symbol, str_date, name)
                 return res
             else:
@@ -65,7 +65,7 @@ def get_save_tick_data(symbol, date, name):
                 toMySQL(df, date, symbol, name)
 
                 sleep_time=max(sleep_time/2, 2) #每次成功下载后sleep_time变为一半，但是至少2s
-                import logErrorToMySQL as em
+                import data163ToMySQL.Tick.logErrorToMySQL as em
                 em.NormaltoDataBase(symbol, name)
                 return res
         else:
