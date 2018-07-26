@@ -64,9 +64,9 @@ def run():
             print("Wait for running at ", h, ':', m, " every day. Now time is %s" %nowTime)
 
 
-        job1_task()
-        time.sleep(7000)
         job2_task()
+        time.sleep(7000)
+        job1_task()
         time.sleep(60)
 
 def main():
