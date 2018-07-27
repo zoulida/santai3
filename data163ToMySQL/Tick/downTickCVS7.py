@@ -156,7 +156,9 @@ def toMySQL(df, date, symbol, name):
 
 
 from tools.LogTools import Logger
-logger = Logger(logName='log.txt', logLevel="DEBUG", logger="downTickCVS3.py").getlog()
+nowTime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+logName = 'log-' + nowTime + '.txt'
+logger = Logger(logName, logLevel="DEBUG", logger="downTickCVS3.py").getlog()
 
 def get_all_stock2():
     stock_info = ts.get_stock_basics()
