@@ -9,7 +9,7 @@ def creatTable():
     # logger.info("正在创建数据表" + "ErrorInfo")
 
     sqlSentence3 = "create table ErrorInfo" + "(股票代码 VARCHAR(10), 第一次出错日期 date, 连续出错次数 bigint DEFAULT 0,  名称 VARCHAR(10),\
-                                   weight float,  primary key(股票代码) )"
+                                   weight float,   最后更新日期 date,  primary key(股票代码) )"
 
     # print(sqlSentence3)
     try:
@@ -21,8 +21,10 @@ def creatTable():
 def ErrortoDataBase(symbol, str_date, name):
     creatTable()
 
-    updateSentence = "INSERT INTO ErrorInfo(股票代码, 第一次出错日期, 名称) VALUE('%s', '%s' , '%s')"%(symbol, str_date, name)\
-                     + " ON DUPLICATE KEY UPDATE 连续出错次数=连续出错次数+1"
+    import datetime
+    today=datetime.date.today()
+    updateSentence = "INSERT INTO ErrorInfo(股票代码, 第一次出错日期, 名称, 最后更新日期) VALUE('%s', '%s' , '%s', '%s')"%(symbol, str_date, name, today)\
+                     + " ON DUPLICATE KEY UPDATE 连续出错次数=连续出错次数+1, 最后更新日期 = '%s'"%today
     print(updateSentence)
     cursor.execute(updateSentence)
 
@@ -32,7 +34,10 @@ def ErrortoDataBase(symbol, str_date, name):
 
 def NormaltoDataBase(symbol, name):
     creatTable()
-    updateSentence = "INSERT INTO ErrorInfo(股票代码, 名称) VALUE('%s',  '%s')" % (symbol, name) \
+
+    import datetime
+    today=datetime.date.today()
+    updateSentence = "INSERT INTO ErrorInfo(股票代码, 名称) VALUE('%s',  '%s', '%s')" % (symbol, name, today) \
                      + " ON DUPLICATE KEY UPDATE 连续出错次数=0"
     print(updateSentence)
     cursor.execute(updateSentence)
