@@ -37,7 +37,7 @@ def NormaltoDataBase(symbol, name):
 
     import datetime
     today=datetime.date.today()
-    updateSentence = "INSERT INTO ErrorInfo(股票代码, 名称) VALUE('%s',  '%s', '%s')" % (symbol, name, today) \
+    updateSentence = "INSERT INTO ErrorInfo(股票代码, 名称, 最后更新日期) VALUE('%s',  '%s', '%s')" % (symbol, name, today) \
                      + " ON DUPLICATE KEY UPDATE 连续出错次数=0"
     print(updateSentence)
     cursor.execute(updateSentence)
