@@ -19,29 +19,38 @@ def creatTable():
         logger.info("数据表ErrorInfo" + "已经存在，无法再次创建");
 
 def ErrortoDataBase(symbol, str_date, name):
-    creatTable()
+    try:
+        creatTable()
 
-    import datetime
-    today=datetime.date.today()
-    updateSentence = "INSERT INTO ErrorInfo(股票代码, 第一次出错日期, 名称, 最后更新日期) VALUE('%s', '%s' , '%s', '%s')"%(symbol, str_date, name, today)\
-                     + " ON DUPLICATE KEY UPDATE 连续出错次数=连续出错次数+1, 最后更新日期 = '%s'"%today
-    print(updateSentence)
-    cursor.execute(updateSentence)
+        import datetime
+        today=datetime.date.today()
+        updateSentence = "INSERT INTO ErrorInfo(股票代码, 第一次出错日期, 名称, 最后更新日期) VALUE('%s', '%s' , '%s', '%s')"%(symbol, str_date, name, today)\
+                         + " ON DUPLICATE KEY UPDATE 连续出错次数=连续出错次数+1, 最后更新日期 = '%s'"%today
+        print(updateSentence)
+        cursor.execute(updateSentence)
 
-    #cursor.close()
-    db.commit()
-    #db.close()
+        #cursor.close()
+        db.commit()
+        #db.close()
+    except Exception as msg:
+        #print(str(msg))
+        logger.error(msg);
 
 def NormaltoDataBase(symbol, name):
-    creatTable()
 
-    import datetime
-    today=datetime.date.today()
-    updateSentence = "INSERT INTO ErrorInfo(股票代码, 名称, 最后更新日期) VALUE('%s',  '%s', '%s')" % (symbol, name, today) \
-                     + " ON DUPLICATE KEY UPDATE 连续出错次数=0"
-    print(updateSentence)
-    cursor.execute(updateSentence)
+    try:
+        creatTable()
 
-    # cursor.close()
-    db.commit()
-    # db.close()
+        import datetime
+        today=datetime.date.today()
+        updateSentence = "INSERT INTO ErrorInfo(股票代码, 名称, 最后更新日期) VALUE('%s',  '%s', '%s')" % (symbol, name, today) \
+                         + " ON DUPLICATE KEY UPDATE 连续出错次数=0"
+        print(updateSentence)
+        cursor.execute(updateSentence)
+
+        # cursor.close()
+        db.commit()
+        # db.close()
+    except Exception as msg:
+        #print(str(msg))
+        logger.error(msg);
