@@ -75,7 +75,7 @@ def toCVS(filepath, isalldate=False ):
 
 # 数据库名称和密码
 name = 'root'
-password = 'root'  # 替换为自己的账户名和密码
+password = 'root'  # 替换为自己的账户名和密码 
 
 def toMySQL(formfilepath):
     ##########################将股票数据存入数据库###########################
