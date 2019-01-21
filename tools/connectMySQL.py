@@ -7,7 +7,6 @@ password = 'root'  # 替换为自己的账户名和密码
 
 
 def getTickCursorAndDB():
-    ##########################将股票数据存入数据库###########################
 
     # 建立本地数据库连接(需要先开启数据库服务)
     db = pymysql.connect('localhost', name, password, charset='utf8')
@@ -23,8 +22,6 @@ def getTickCursorAndDB():
     return cursor,db
 
 def getStockDataBaseCursorAndDB():
-    ##########################将股票数据存入数据库###########################
-
 
     # 建立本地数据库连接(需要先开启数据库服务)
     db = pymysql.connect('localhost', name, password, charset='utf8')
