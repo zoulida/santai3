@@ -35,3 +35,8 @@ def getStockDataBaseCursorAndDB():
     sqlSentence2 = "use stockDataBase;"
     cursor.execute(sqlSentence2)
     return cursor,db
+
+def getEngine():
+    from sqlalchemy import create_engine
+    engine = create_engine('mysql://%s:%s@127.0.0.1/stockDataBase?charset=utf8' % (name, password))
+    return engine
