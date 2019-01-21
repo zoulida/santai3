@@ -29,6 +29,12 @@ def job2():
     import data163ToMySQL.Tick.downTickCVS7 as tk
     tk.main()
 
+def job3():
+    print("I'm working for job3")
+    time.sleep(2)
+    print("job3:", datetime.datetime.now())
+    import data163ToMySQL.getIndexDaily as gi
+    gi.download_indexSets()
 
 def job1_task():
     threading.Thread(target=job1).start()
@@ -37,6 +43,8 @@ def job1_task():
 def job2_task():
     threading.Thread(target=job2).start()
 
+def job3_task():
+    threading.Thread(target=job3).start()
 
 def run():
 
@@ -67,6 +75,8 @@ def run():
         job2_task()
         time.sleep(7000)
         job1_task()
+        time.sleep(60)
+        job3_task()
         time.sleep(60)
 
 def main():
