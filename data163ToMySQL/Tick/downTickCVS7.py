@@ -197,5 +197,5 @@ def main():
             if get_save_tick_data(getattr(row, "Index"), date, getattr(row, "name")):
                 time.sleep(sleep_time)
 
-
-main()
+if __name__ == "__main__":
+    main()

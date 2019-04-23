@@ -25,7 +25,7 @@ df = pro.index_daily(ts_code='000001.SH',start_date='20190122', end_date=None)
 6  399016.SZ   20181018           1.06  18.86
 7  399300.SZ   20181018           0.27  11.17
 '''
-df = pro.index_dailybasic(trade_date='20181018', fields='ts_code,trade_date,turnover_rate,pe')
+#df = pro.index_dailybasic(trade_date='20181018', fields='ts_code,trade_date,turnover_rate,pe')
 print(df)
 
 '''from sqlalchemy import create_engine

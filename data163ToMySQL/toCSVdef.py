@@ -6,6 +6,7 @@ import pymysql
 import os
 import time
 import traceback
+import tushare as ts
 
 # 爬虫抓取网页函数
 def getHtml(url):
@@ -21,21 +22,29 @@ def getStackCode(html):
     code = pat.findall(html)
     return code
 
+
+
+
 def toCVS(filepath, isalldate=False ):
     #########################开始干活############################
-    Url = 'http://quote.eastmoney.com/stocklist.html'  # 东方财富网股票数据连接地址
+    #Url = 'http://quote.eastmoney.com/stocklist.html'  # 东方财富网股票数据连接地址
+    #Url = 'http://quote.eastmoney.com/center/gridlist.html#hs_a_board'
     #filepath = 'd:\\data\\'  # 定义数据文件保存路径
     # 实施抓取
-    code = getStackCode(getHtml(Url))
+    from data163ToMySQL.Tick import downTickCVS7
+    codes = downTickCVS7.get_all_stock2()
     # 获取所有股票代码（以6/3/0开头的，应该是沪市数据）集合
-    CodeList = []
+    '''CodeList = []
     for item in code:
         if item[0] == '6':
             CodeList.append(item)
         if item[0] == '0':
             CodeList.append(item)
         if item[0] == '3':
-            CodeList.append(item)
+            CodeList.append(item)'''
+    CodeList = []
+    for row in codes.itertuples(index=True, name='Pandas'):
+        CodeList.append(getattr(row, "Index"))
     # 抓取数据并保存到本地csv文件
     for code in CodeList:
         #if int(code )  >600001 or int(code )<300000:
@@ -45,7 +54,7 @@ def toCVS(filepath, isalldate=False ):
         print('正在获取股票%s数据' % code)
         import datetime
         today=datetime.date.today()
-        z30daysago = today + datetime.timedelta(days=-30)
+        z30daysago = today + datetime.timedelta(days=-60)
         startstr='19900101'
         if isalldate == False:
             startstr=str(z30daysago.strftime('%Y%m%d'))
@@ -179,7 +188,8 @@ def main():
     # 爬取程序，每天存储一个文件夹。
     filepath = 'd:\\data\\'  # 定义数据文件保存路径
     import datetime
-    today = datetime.date.today()
+    delta = datetime.timedelta(days=10)
+    today = datetime.date.today() - delta
     todaystr = str(today.strftime('%Y%m%d'))
     filepath = filepath + todaystr + "\\"
     print(filepath)
