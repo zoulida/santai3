@@ -130,6 +130,7 @@ if __name__ == '__main__':
     #code = ""
     dateDay = '2017-09-04'
     #getGreaterThanList(codelist, dateDay)
-    listResult = getGreaterThanList(dateDay , percentage)
+    listResult = getGreaterThanList(dateDay)
+    #listResult = getGreaterThanList(dateDay , percentage)
 
     print(listResult)
