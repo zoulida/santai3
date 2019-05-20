@@ -29,8 +29,10 @@ logger = Logger(logName='log.txt', logLevel="DEBUG", logger="logTest.py").getlog
 
 class GetZDT:
     def __init__(self):
-        self.user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/64.0.3282.167 Chrome/64.0.3282.167 Safari/537.36"
+        self.user_agent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+        #self.today = datetime.date(2018, 7, 11)
         self.today = time.strftime("%Y%m%d")
+        self.today = '20190520'
         DATA_PATH = "d:\\"
         self.path = DATA_PATH
         self.zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + \
@@ -39,7 +41,7 @@ class GetZDT:
         self.zrzt_url = 'http://hqdata.jrj.com.cn/zrztjrbx/limitup.js' #昨日涨停
 
         self.host = "home.flashdata2.jrj.com.cn"
-        self.reference = "http://stock.jrj.com.cn/tzzs/z ... ot%3B"
+        self.reference = "http://stock.jrj.com.cn/tzzs/zdtwdj/dtforce.shtml"
 
         self.header_zdt = {"User-Agent": self.user_agent,
                            "Host": self.host,
@@ -59,7 +61,7 @@ class GetZDT:
     def getdata(self, url, headers, retry=5):
         for i in range(retry):
             try:
-                resp = requests.get(url=url, headers=headers)#如果这里404，首先要考虑是否在9点之前，需改为昨天的日期下载。
+                resp = requests.get(url=url, headers=headers)
                 content = resp.text
                 md_check = re.findall('summary|lasttradedate', content)
                 if content and len(md_check) > 0:
