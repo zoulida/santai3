@@ -31,11 +31,11 @@ class GetZDT:
     def __init__(self):
         self.user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/64.0.3282.167 Chrome/64.0.3282.167 Safari/537.36"
         self.today = time.strftime("%Y%m%d")
-        DATA_PATH = "d:"
+        DATA_PATH = "d:\\"
         self.path = DATA_PATH
         self.zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + \
             self.today + ".js"
-        self.zrzt_url = 'http://hqdata.jrj.com.cn/zrztjrbx/limitup.js'
+        self.zrzt_url = 'http://hqdata.jrj.com.cn/zrztjrbx/limitup.js' #昨日涨停
 
         self.host = "home.flashdata2.jrj.com.cn"
         self.reference = "http://stock.jrj.com.cn/tzzs/z ... ot%3B"
@@ -166,6 +166,7 @@ class GetZDT:
             df[u'今日涨停强度'] = df[u'今日涨停强度'].map(lambda x: round(x, 0))
             try:
                 #df.to_sql(self.today + post_fix, engine, if_exists='fail')
+                df.to_excel('testzrt.xls', encoding='gbk')
                 print(df)
             except Exception as e:
                 logger.info(e)
@@ -182,17 +183,30 @@ class GetZDT:
     # 昨日涨停今日的状态，今日涨停
 
     def storedata(self):
+
+        #涨停
         zdt_content = self.getdata(self.zdt_url, headers=self.header_zdt)
         logger.info('zdt Content' + zdt_content)
         zdt_js = self.convert_json(zdt_content)
         self.save_to_dataframe(zdt_js, self.zdt_indexx, 1, 'zdt')
         time.sleep(0.5)
+
+        #昨日涨停表现
         zrzt_content = self.getdata(self.zrzt_url, headers=self.header_zrzt)
         logger.info('zrzt Content' + zdt_content)
-
         zrzt_js = self.convert_json(zrzt_content)
         self.save_to_dataframe(zrzt_js, self.zrzt_indexx, 2, 'zrzt')
+        time.sleep(0.5)
 
+        #跌停
+        self.dt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/dtForce/20190520.js'
+        dt_content = self.getdata(self.dt_url, headers=self.header_zdt)
+        logger.info('zdt Content' + dt_content)
+
+        #涨跌停历史数据
+        zdtlssj = 'http://homeflashdata2.jrj.com.cn/limitStatistic/month/201905.js?_=1308005450112'
+        zdtlssj_content = self.getdata(zdtlssj, headers=self.header_zdt)
+        logger.info('zdt Content' + zdtlssj_content)
 
 if __name__ == '__main__':
     # today='2018-04-16'
