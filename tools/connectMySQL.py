@@ -26,6 +26,7 @@ def getStockDataBaseCursorAndDB():
     # 建立本地数据库连接(需要先开启数据库服务)
     db = pymysql.connect('localhost', name, password, charset='utf8')
     cursor = db.cursor()
+    #print(db, cursor)
     # 创建数据库stockDataBase
     sqlSentence1 = "create database stockDataBase"
     try:
