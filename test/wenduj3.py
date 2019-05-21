@@ -33,8 +33,8 @@ class GetZDT:
         #self.today = datetime.date(2018, 7, 11)
         self.today = time.strftime("%Y%m%d")
         self.today = '20190520'
-        DATA_PATH = "d:\\"
-        self.path = DATA_PATH
+        DIR_DATA_PATH = "d:\\zdtDATA"
+        #self.path = DATA_PATH
         self.zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + \
             self.today + ".js"
         #"http://homeflashdata2.jrj.com.cn/limitStatistic/ztForce/20190520.js"
@@ -188,15 +188,29 @@ class GetZDT:
 
     # 昨日涨停今日的状态，今日涨停
 
-    def storedata(self):
 
-        #涨停
+    def zhangtingStockProcess(self, dayStr):
+
+        # self.today = datetime.date(2018, 7, 11)
+        self.today = time.strftime("%Y%m%d")
+        self.today = '20190520'
+        DIR_DATA_PATH = "d:\\zdtDATA"
+        # self.path = DATA_PATH
+        zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + \
+                       dayStr + ".js"
+
+
+        # 涨停
         zdt_content = self.getdata(self.zdt_url, headers=self.header_zdt)
         logger.info('zdt Content' + zdt_content)
         zdt_js = self.convert_json(zdt_content)
         self.save_to_dataframe(zdt_js, self.zdt_indexx, 1, 'zdt')
         time.sleep(0.5)
 
+    def storedata(self):
+        self.zhangtingStockProcess()
+
+'''
         #昨日涨停表现
         zrzt_content = self.getdata(self.zrzt_url, headers=self.header_zrzt)
         logger.info('zrzt Content' + zdt_content)
@@ -223,7 +237,7 @@ class GetZDT:
         zdt1fzsjtj = 'http://homeflashdata2.jrj.com.cn/limitStatistic/min_and_concept.js'
         zdt1fzsjtj_content = self.getdata(zdt1fzsjtj, headers=self.header_zdt)
         logger.info('zdt1fzsjtj Content' + zdt1fzsjtj_content)
-
+'''
 
 if __name__ == '__main__':
     # today='2018-04-16'
