@@ -11,7 +11,7 @@ def dayStrToTimeStamp(dayStr = "20190521"):
 def getDayStr(days):#返回当天日期与days天之前的日期，str类型
 
     today = datetime.date.today()
-    z30daysago = today + datetime.timedelta(days=-60)
+    z30daysago = today + datetime.timedelta(days=-days)
     #startstr = '19900101'
     startstr = str(z30daysago.strftime('%Y%m%d'))
     endstr = str(today.strftime('%Y%m%d'))

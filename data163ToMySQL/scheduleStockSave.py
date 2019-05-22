@@ -36,6 +36,14 @@ def job3():
     import data163ToMySQL.getIndexDaily as gi
     gi.download_indexSets()
 
+def job4():
+    print("I'm working for job4:涨跌停数据收集")
+    time.sleep(2)
+    print("job4:", datetime.datetime.now())
+    import data163ToMySQL.wenduj3 as wenduj3
+    obj = wenduj3.GetZDT()
+    obj.zdtStock5Days()
+
 def job1_task():
     threading.Thread(target=job1).start()
 
@@ -45,6 +53,9 @@ def job2_task():
 
 def job3_task():
     threading.Thread(target=job3).start()
+
+def job4_task():
+    threading.Thread(target=job4).start()
 
 def run():
 
@@ -77,6 +88,8 @@ def run():
         job1_task()
         time.sleep(60)
         job3_task()
+        time.sleep(60)
+        job4_task()
         time.sleep(60)
 
 def main():

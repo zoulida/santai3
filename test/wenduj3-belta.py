@@ -253,15 +253,79 @@ class GetZDT:
 
         #time.sleep(0.5)
 
-    def zhangtingStockAllDays(self):#只执行一次，并否每天执行
+    def dietingStockProcess(self, dayStr):#首先判断数据库是否有，如果有什么都不做；没有则写入csv以及利用pd。tosql存入数据库。
+
+        timeArray = time.strptime(dayStr, "%Y%m%d")
+        timeStamp = int(time.mktime(timeArray))
+        #判断是否已经下载了
+        try:
+            import tools.connectMySQL as cm
+            engine = cm.getEngine()
+            cnx = engine.raw_connection()
+            data = pd.read_sql('SELECT * FROM dieting where 时间戳 = %s' % timeStamp, cnx)
+            if(data.__len__() > 0):
+                return
+                #print(data.__len__())
+
+        except Exception as e:
+            #print('traceback.print_exc():', traceback.print_exc())
+            logger.info(e)
+
+
+        zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/dtForce/' + \
+                       dayStr + ".js"
+        print(zdt_url)
+
+        # 涨停
+        zdt_content = self.getdata(zdt_url, headers=self.header_zdt)
+        if zdt_content is None:
+            return
+        logger.info('zdt Content' + zdt_content)
+        zdt_js = self.convert_json(zdt_content)
+
+        #保存CSV
+        data = zdt_js
+        indexx = self.zdt_indexx
+        if not data:
+            return
+
+        df = pd.DataFrame(data, columns=indexx)
+        path = self.DIR_DATA_PATH + "\dieting"
+        filename = os.path.join(
+            path, dayStr + "_" + 'dieting' + ".csv")
+
+        if not os.path.exists(path):
+            os.mkdir(path)
+
+        df['日期'] = dayStr
+
+        df['时间戳'] = timeStamp
+        df.to_csv(filename, encoding='gbk')
+
+
+        #保存数据库
+        try:
+            import tools.connectMySQL as cm
+            engine = cm.getEngine()
+            df.to_sql('dieting', engine, if_exists='append', index=False)
+
+        except Exception as e:
+            logger.info(e)
+
+        #time.sleep(0.5)
+
+    def zdtStockAllDays(self):#只执行一次，并否每天执行
         from tools.timeTools import dateRange
         dayslist = dateRange('20160301', '20190522')
         for oneday in dayslist:
-            self.zhangtingStockProcess(oneday)
+            #self.zhangtingStockProcess(oneday)
+            self.dietingStockProcess(oneday)
             time.sleep(0.5)
             print('oneday is ' + oneday)
+
+
     def storedata(self):
-        self.zhangtingStockAllDays()
+        self.zdtStockAllDays()
 
 '''
         #昨日涨停表现
