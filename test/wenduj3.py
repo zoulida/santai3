@@ -24,7 +24,7 @@ import datetime
 # sys.setdefaultencoding('gbk')
 
 from tools.LogTools import *
-logger = Logger(logName='log.txt', logLevel="DEBUG", logger="logTest.py").getlog()
+logger = Logger(logName='log.txt', logLevel="DEBUG", logger="santai3").getlog()
 
 
 class GetZDT:
@@ -33,7 +33,7 @@ class GetZDT:
         #self.today = datetime.date(2018, 7, 11)
         self.today = time.strftime("%Y%m%d")
         self.today = '20190520'
-        DIR_DATA_PATH = "d:\\zdtDATA"
+        DIR_DATA_PATH = "d:\zdtDATA"
         #self.path = DATA_PATH
         self.zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + \
             self.today + ".js"
@@ -57,12 +57,15 @@ class GetZDT:
                             "Host": "hqdata.jrj.com.cn",
                             "Referer": "http://stock.jrj.com.cn/tzzs/zrztjrbx.shtml"
                             }
+        self.DIR_DATA_PATH = "d:\zdtDATA"
+        if not os.path.exists(DIR_DATA_PATH):
+            os.mkdir(DIR_DATA_PATH)
 
-    def getdata(self, url, headers, retry=5):
+    def getdata(self, url, headers, retry=2):
         for i in range(retry):
             try:
                 resp = requests.get(url=url, headers=headers)
-
+                resp.encoding = 'gbk' #UnicodeEncodeError: 'gbk' codec can't encode character '\ufffd'
                 if resp.status_code == 200:
 
                     content = resp.text
@@ -70,12 +73,12 @@ class GetZDT:
                 # if content and len(md_check) > 0:
                     return content
                 else:
-                    time.sleep(60)
+                    time.sleep(0)
                     logger.info('failed to get content, retry: {}'.format(i))
                     continue
             except Exception as e:
                 logger.info(e)
-                time.sleep(60)
+                time.sleep(0)
                 continue
         return None
 
@@ -189,26 +192,76 @@ class GetZDT:
     # 昨日涨停今日的状态，今日涨停
 
 
-    def zhangtingStockProcess(self, dayStr):
+    def zhangtingStockProcess(self, dayStr):#首先判断数据库是否有，如果有什么都不做；没有则写入csv以及利用pd。tosql存入数据库。
 
-        # self.today = datetime.date(2018, 7, 11)
-        self.today = time.strftime("%Y%m%d")
-        self.today = '20190520'
-        DIR_DATA_PATH = "d:\\zdtDATA"
-        # self.path = DATA_PATH
+        timeArray = time.strptime(dayStr, "%Y%m%d")
+        timeStamp = int(time.mktime(timeArray))
+        #判断是否已经下载了
+        try:
+            import tools.connectMySQL as cm
+            engine = cm.getEngine()
+            cnx = engine.raw_connection()
+            data = pd.read_sql('SELECT * FROM zhangting where 时间戳 = %s' % timeStamp, cnx)
+            if(data.__len__() > 0):
+                return
+                #print(data.__len__())
+
+        except Exception as e:
+            #print('traceback.print_exc():', traceback.print_exc())
+            logger.info(e)
+
+
         zdt_url = 'http://home.flashdata2.jrj.com.cn/limitStatistic/ztForce/' + \
                        dayStr + ".js"
-
+        print(zdt_url)
 
         # 涨停
-        zdt_content = self.getdata(self.zdt_url, headers=self.header_zdt)
+        zdt_content = self.getdata(zdt_url, headers=self.header_zdt)
+        if zdt_content is None:
+            return
         logger.info('zdt Content' + zdt_content)
         zdt_js = self.convert_json(zdt_content)
-        self.save_to_dataframe(zdt_js, self.zdt_indexx, 1, 'zdt')
-        time.sleep(0.5)
 
+        #保存CSV
+        data = zdt_js
+        indexx = self.zdt_indexx
+        if not data:
+            return
+
+        df = pd.DataFrame(data, columns=indexx)
+        path = self.DIR_DATA_PATH + "\zhangting"
+        filename = os.path.join(
+            path, dayStr + "_" + 'zhangting' + ".csv")
+
+        if not os.path.exists(path):
+            os.mkdir(path)
+
+        df['日期'] = dayStr
+
+        df['时间戳'] = timeStamp
+        df.to_csv(filename, encoding='gbk')
+
+
+        #保存数据库
+        try:
+            import tools.connectMySQL as cm
+            engine = cm.getEngine()
+            df.to_sql('zhangting', engine, if_exists='append', index=False)
+
+        except Exception as e:
+            logger.info(e)
+
+        #time.sleep(0.5)
+
+    def zhangtingStockAllDays(self):#只执行一次，并否每天执行
+        from tools.timeTools import dateRange
+        dayslist = dateRange('20160301', '20190522')
+        for oneday in dayslist:
+            self.zhangtingStockProcess(oneday)
+            time.sleep(0.5)
+            print('oneday is ' + oneday)
     def storedata(self):
-        self.zhangtingStockProcess()
+        self.zhangtingStockAllDays()
 
 '''
         #昨日涨停表现
