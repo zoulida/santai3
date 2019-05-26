@@ -325,7 +325,7 @@ class GetZDT:
 
     def zdtStock5Days(self):  # 每天执行
         import tools.timeTools as timeTools
-        startDayStr, endDayStr = timeTools.getDayStr(5)
+        startDayStr, endDayStr = timeTools.getDayStr(30)#多少天
 
         #startDayStr = ''
         #endDayStr = ''

@@ -26,7 +26,7 @@ df = pro.index_daily(ts_code='000001.SH',start_date='20190122', end_date=None)
 7  399300.SZ   20181018           0.27  11.17
 '''
 #df = pro.index_dailybasic(trade_date='20181018', fields='ts_code,trade_date,turnover_rate,pe')
-print(df)
+#print(df)
 
 '''from sqlalchemy import create_engine
 engine = create_engine('mysql://root:root@127.0.0.1/stockDataBase?charset=utf8')
@@ -41,3 +41,9 @@ df.to_sql('stock_index_daily',engine,if_exists='append')'''
 
 #df2 = pro.index_basic(market='SW')
 #print(df2)
+
+
+
+
+df = ts.get_realtime_quotes('000581')
+print(df)

@@ -325,8 +325,14 @@ class GetZDT:
 
 
     def storedata(self):
-        self.zdtStockAllDays()
+        #self.zdtStockAllDays()
 
+        # 涨跌停1分钟数据统计
+        zdt1fzsjtj = 'http://homeflashdata2.jrj.com.cn/limitStatistic/min_and_concept.js'
+        zdt1fzsjtj_content = self.getdata(zdt1fzsjtj, headers=self.header_zdt)
+        #logger.info('zdt1fzsjtj Content' + zdt1fzsjtj_content)
+        print('test' )
+        print(self.convert_json(zdt1fzsjtj_content))
 '''
         #昨日涨停表现
         zrzt_content = self.getdata(self.zrzt_url, headers=self.header_zrzt)
