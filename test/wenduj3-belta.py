@@ -61,6 +61,7 @@ class GetZDT:
         if not os.path.exists(DIR_DATA_PATH):
             os.mkdir(DIR_DATA_PATH)
 
+    #@staticmethod
     def getdata(self, url, headers, retry=2):
         for i in range(retry):
             try:
@@ -316,7 +317,7 @@ class GetZDT:
 
     def zdtStockAllDays(self):#只执行一次，并否每天执行
         from tools.timeTools import dateRange
-        dayslist = dateRange('20160301', '20190522')
+        dayslist = dateRange('20190301', '20190522')
         for oneday in dayslist:
             #self.zhangtingStockProcess(oneday)
             self.dietingStockProcess(oneday)
@@ -324,6 +325,8 @@ class GetZDT:
             print('oneday is ' + oneday)
 
     strtest = 'var min={"time":"2019-05-27 15:18:48","Data":[[925,6,6,["预盈预增","新股","基金重仓股","抗抑郁"}'
+
+
     def storedata(self):
         self.zdtStockAllDays()
 
@@ -331,12 +334,12 @@ class GetZDT:
         zdt1fzsjtj = 'http://homeflashdata2.jrj.com.cn/limitStatistic/min_and_concept.js'
         #zdt1fzsjtj_content = self.getdata(zdt1fzsjtj, headers=self.header_zdt)
         #logger.info('zdt1fzsjtj Content' + zdt1fzsjtj_content)
-        p = re.compile(r'{[\w\W]*}', )
-        if len(self.strtest) <= 0:
-            logger.info('Content\'s length is 0')
-            exit(0)
-        result = p.findall(self.strtest)
-        print(result)
+        # p = re.compile(r'{[\w\W]*}', )
+        # if len(self.strtest) <= 0:
+        #     logger.info('Content\'s length is 0')
+        #     exit(0)
+        # result = p.findall(self.strtest)
+        # print(result)
         #print(self.convert_json(self.strtest))
 '''
         #昨日涨停表现
