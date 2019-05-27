@@ -13,13 +13,13 @@ wenduji = getConnectionWuDuJi()
 
 my_set = wenduji #使用test_set集合，没有则自动创建
 
-#my_set.insert({"name":"zhangsan","age":18})
+my_set.insert({"name":"zhangsan","age":18})
 #或
 #my_set.save({"name":"zhangsan","age":18})
 
 #添加多条数据到集合中
 users=[{"name":"zhangsan","age":18},{"name":"lisi","age":20}]
-my_set.insert(users)
+#my_set.insert(users)
 #或
 #my_set.save(users)
 
