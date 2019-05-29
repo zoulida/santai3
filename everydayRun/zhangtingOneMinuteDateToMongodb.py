@@ -36,10 +36,32 @@ class ZhangtingDietingData:#存储温度计数据，每分钟都有更新：1）
         params = json.loads(str)
         return params
 
-    def toMongodb(self, jsonObject):
+    def toMongodbTestOk(self, jsonObject):
         from tools.mongodbFactory import getConnectionWuDuJi
         wendujiMongodb = getConnectionWuDuJi()
         wendujiMongodb.insert(jsonObject)
+        for i in wendujiMongodb.find():
+            print(i)
+
+    def toMongodb(self, jsonObject):
+        from tools import mongodbFactory
+        wendujiMongodb = mongodbFactory.getConnectionWuDuJi()
+        client = mongodbFactory.getClient()
+
+        #wendujiMongodb.insert(jsonObject)
+
+        criteriaObj = {"MetaName":"timestamp"}
+        maxTime = {"$set":{"MetaName":"timestamp","maxTime": 666666}}
+        #wendujiMongodb.update(criteria = criteriaObj ,document = maxTime, upsert = True, multi = False)
+        wendujiMongodb.update(criteriaObj, maxTime, upsert = True)
+
+        # with client.start_session() as s:#使用事务
+        #     s.start_transaction()
+        #     wendujiMongodb.insert_one(jsonObject, session=s)
+        #     maxTime = {"maxTime" : 3333333}
+        #     wendujiMongodb.upsert(maxTime, upsert = True)
+        #
+        #     s.commit_transaction()
         for i in wendujiMongodb.find():
             print(i)
 
@@ -63,7 +85,8 @@ class ZhangtingDietingData:#存储温度计数据，每分钟都有更新：1）
         import json
         params = json.loads(result[0])
         print(params)
-        print(params['Data'][0][3][0])
+        print(params['Data'][0][0])
+        #print(params['Data'][0][3][0])
 
         #str = '{"params":{"id":222,"offset":0},"nodename":"topic"}'
         #print(str)
@@ -75,3 +98,4 @@ if __name__ == '__main__':
     logger.info("zhangtingOneMinuteDateToMongodb.py start")
     obj = ZhangtingDietingData()
     obj.allTask()
+    #obj.getResultTest()
