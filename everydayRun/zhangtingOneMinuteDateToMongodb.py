@@ -53,8 +53,8 @@ class ZhangtingDietingData:#存储温度计数据，每分钟都有更新：1）
         criteriaObj = {"MetaName":"timestamp"}
         maxTime = {"$set":{"MetaName":"timestamp","maxTime": 666666}}
         #wendujiMongodb.update(criteria = criteriaObj ,document = maxTime, upsert = True, multi = False)
-        wendujiMongodb.update(criteriaObj, maxTime, upsert = True)
-
+        #wendujiMongodb.update(criteriaObj, maxTime, upsert = True)#亲测可用
+        wendujiMongodb.update_one(criteriaObj, maxTime, upsert=True)#只找一个，效率高，在不建索引的前题下
         # with client.start_session() as s:#使用事务
         #     s.start_transaction()
         #     wendujiMongodb.insert_one(jsonObject, session=s)
