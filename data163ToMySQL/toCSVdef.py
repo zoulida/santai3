@@ -32,7 +32,7 @@ def toCVS(filepath, isalldate=False ):
     #filepath = 'd:\\data\\'  # 定义数据文件保存路径
     # 实施抓取
     from data163ToMySQL.Tick import downTickCVS7
-    codes = downTickCVS7.get_all_stock2()
+    codes = downTickCVS7.get_all_stock2()#####借用函数
     # 获取所有股票代码（以6/3/0开头的，应该是沪市数据）集合
     '''CodeList = []
     for item in code:
