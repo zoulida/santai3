@@ -188,7 +188,7 @@ def main():
     # 爬取程序，每天存储一个文件夹。
     filepath = 'd:\\data\\'  # 定义数据文件保存路径
     import datetime
-    delta = datetime.timedelta(days=10)
+    delta = datetime.timedelta(days=0)
     today = datetime.date.today() - delta
     todaystr = str(today.strftime('%Y%m%d'))
     filepath = filepath + todaystr + "\\"

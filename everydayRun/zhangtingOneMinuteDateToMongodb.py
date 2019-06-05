@@ -31,7 +31,7 @@ class ZhangtingDietingData:#存储温度计数据，每分钟都有更新：1）
         #print(result[0])
         return result[0]
 
-    def toJson(self, str):
+    def toJson(self, str):#把引号去掉
         import json
         params = json.loads(str)
         return params
@@ -43,31 +43,59 @@ class ZhangtingDietingData:#存储温度计数据，每分钟都有更新：1）
         for i in wendujiMongodb.find():
             print(i)
 
+    def isRepeat(self, jsonObject):#判断当前jsonobject是否已经已经存储
+        from tools import mongodbFactory
+        wendujiMongodb = mongodbFactory.getConnectionWuDuJi()
+        timelast = jsonObject['time']
+        jsonTimelast = {"time":timelast} #'2019-06-05 10:25:21'
+        print('网页获取时间为：')
+        print(jsonTimelast)
+        result = wendujiMongodb.find(jsonTimelast)
+        #print(result.count())
+        if(result.count() == 0):
+            print('尚未在数据库插入该条数据，开始插入')
+        else:
+            print('已经插入ZhangtingDietingData，不再插入')
+        return result.count()
+        #for i in result:
+        #    print(i)
+
     def toMongodb(self, jsonObject):
         from tools import mongodbFactory
         wendujiMongodb = mongodbFactory.getConnectionWuDuJi()
-        client = mongodbFactory.getClient()
+        #client = mongodbFactory.getClient()
 
-        #wendujiMongodb.insert(jsonObject)
+        wendujiMongodb.insert(jsonObject)
 
+        #以下作废
+        '''
         criteriaObj = {"MetaName":"timestamp"}
         maxTime = {"$set":{"MetaName":"timestamp","maxTime": 666666}}
         #wendujiMongodb.update(criteria = criteriaObj ,document = maxTime, upsert = True, multi = False)
         #wendujiMongodb.update(criteriaObj, maxTime, upsert = True)#亲测可用
         wendujiMongodb.update_one(criteriaObj, maxTime, upsert=True)#只找一个，效率高，在不建索引的前题下
-        # with client.start_session() as s:#使用事务
+        # with client.start_session() as s:#使用事务 没有成功
         #     s.start_transaction()
         #     wendujiMongodb.insert_one(jsonObject, session=s)
         #     maxTime = {"maxTime" : 3333333}
         #     wendujiMongodb.upsert(maxTime, upsert = True)
         #
-        #     s.commit_transaction()
-        for i in wendujiMongodb.find():
-            print(i)
+        #     s.commit_transaction()'''
+        #for i in wendujiMongodb.find():
+        #    print(i)
 
     def allTask(self):
+
+        #逻辑是：1)先爬取数据，2）判断是否已经插入过，用‘time’判断，3）插入，4）每天收盘后执行，5）定期更新系统时间
         str = self.getResult()
+
+        #str = None
+        if str is None or str == '':
+            return
+
         jsonO = self.toJson(str)
+        if(self.isRepeat(jsonO)):
+            return
         self.toMongodb(jsonO)
 
     def getResultTest(self):
