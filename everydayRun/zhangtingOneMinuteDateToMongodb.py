@@ -19,7 +19,7 @@ class ZhangtingDietingData:#存储温度计数据，每分钟都有更新：1）
         # 涨跌停1分钟数据统计
         zdt1fzsjtj = 'http://homeflashdata2.jrj.com.cn/limitStatistic/min_and_concept.js'
         zdtObject = wenduj3.GetZDT()
-        zdt1fzsjtj_content = zdtObject.getdata(zdt1fzsjtj, headers=zdtObject.header_zdt)
+        zdt1fzsjtj_content = zdtObject.getdata(zdt1fzsjtj, headers=zdtObject.header_zdt, retry=100)#重试500分钟
         #logger.info('zdt1fzsjtj Content' + zdt1fzsjtj_content)
 
         self.strContent = zdt1fzsjtj_content

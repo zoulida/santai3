@@ -73,12 +73,12 @@ class GetZDT:
                 # if content and len(md_check) > 0:
                     return content
                 else:
-                    time.sleep(0)
+                    time.sleep(300)#5分钟后重试
                     logger.info('failed to get content, retry: {}'.format(i))
                     continue
             except Exception as e:
                 logger.info(e)
-                time.sleep(0)
+                time.sleep(300)
                 continue
         return None
 
