@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData">
+  <component name="PublishConfigData" autoUpload="Always" serverName="root@202.194.246.155:2222">
     <serverData>
       <paths name="Copy of project-level server 'ubuntu'">
         <serverdata>
@@ -16,6 +16,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="root@202.194.246.155:2222">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/volume/pythonworkspace/santai3" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="ubuntu">
         <serverdata>
           <mappings>
@@ -24,5 +31,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

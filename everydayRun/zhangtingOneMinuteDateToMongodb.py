@@ -84,7 +84,7 @@ class ZhangtingDietingData:#存储温度计数据，每分钟都有更新：1）
         #for i in wendujiMongodb.find():
         #    print(i)
 
-    def allTask(self):
+    def allTask(self):#原本想做好几个任务，现在只做了一个
 
         #逻辑是：1)先爬取数据，2）判断是否已经插入过，用‘time’判断，3）插入，4）每天收盘后执行，5）定期更新系统时间
         str = self.getResult()

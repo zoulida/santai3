@@ -1,4 +1,4 @@
-__author__ = 'zoulida'
+__author__ = 'zoulida' #这个在win上成功运行
 # -*- coding:utf-8 -*-
 
 import socket
