@@ -1,3 +1,6 @@
+#coding=utf-8
+
+
 import datetime
 #import schedule #pip install schedule
 import threading
@@ -8,7 +11,13 @@ import sys
 import os
 print( "当前工作路径",os.getcwd())
 sys.path.append(os.getcwd())
-#print(sys.path)
+#sys.path.append('/volume/pythonworkspace/santai3')
+
+from tools.LogCut import *
+logger = Logger(logName='santailog.out', logLevel="DEBUG", logger="santai3").getlog()
+
+
+logger.debug(sys.path)
 
 
 
@@ -16,6 +25,9 @@ def job1():
     print("I'm working for everydayRun.zhangtingOneMinuteDateToMongodb.ZhangtingDietingData()")
     time.sleep(2)
     print("job1:", datetime.datetime.now())
+    #import tools.LogCut as lc
+    #lg = lc.Logger(logName='santailog.out', logLevel="DEBUG", logger="santai3").getlog()
+
     import everydayRun.zhangtingOneMinuteDateToMongodb as zm
     obj = zm.ZhangtingDietingData()
     obj.allTask()
@@ -75,13 +87,17 @@ def run():
 
             # 到达设定时间，结束内循环
             h = 20
-            m = 16
+            m = 7
+            # s = 10
+            # if now.second <= s:
+            #     break
             if now.hour == h and now.minute == m:
 
                 break
 
             nowTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            print("Wait for running at ", h, ':', m, " every day. Now time is %s" %nowTime)
+            strDebug = 'Wait for running at %s:%s every day. Now time is %s' %(h, m, nowTime)
+            logger.debug(strDebug)
 
         job1_task()
         time.sleep(60)
