@@ -1,5 +1,5 @@
 __author__ = 'Administrator'
-import tensorflow as tf
+'''import tensorflow as tf
 state = tf.Variable(0.0,dtype=tf.float32)
 one = tf.constant(1.0,dtype=tf.float32)
 new_val = tf.add(state, one)
@@ -13,4 +13,4 @@ with tf.Session() as sess:
         u = sess.run([update])
         print(s)
         print(u)
-#print(state)
+#print(state)'''

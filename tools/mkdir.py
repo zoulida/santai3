@@ -28,3 +28,4 @@ def mkdirA(path):
 
         return False
 
+mkdirA('/volume/stock_data')

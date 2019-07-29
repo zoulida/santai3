@@ -119,7 +119,7 @@ def poolpre():
 
 
 
-percentage = 1.07
+percentage = 1.07  #1.07 代表上涨%7以上
 
 if __name__ == '__main__':
     #import datetime
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     #codelist = getStockList()
 
     #code = ""
-    dateDay = '2017-09-04'
+    dateDay = '2017-09-05'
     #getGreaterThanList(codelist, dateDay)
     listResult = getGreaterThanList(dateDay)
     #listResult = getGreaterThanList(dateDay , percentage)
