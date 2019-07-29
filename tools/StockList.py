@@ -2,11 +2,11 @@ __author__ = 'zoulida'
 
 import tushare as ts
 import pandas as pd
-from tools.LogTools import Logger
+from santai3.tools.LogTools import Logger
 logger = Logger(logName='log.txt', logLevel="DEBUG", logger="logTest.py").getlog()
 def get_all_stock2():
-    import tools.platformPrint as pp
-    import tools.mkdir as mkdir
+    import santai3.tools.platformPrint as pp
+    import santai3.tools.mkdir as mkdir
     if pp.UsePlatform() == "Linux":
         mkdir.mkdirA('/volume/stock_data')
         filepath = '/volume/stock_data/get_stock_basics.csv'
