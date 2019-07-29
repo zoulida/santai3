@@ -1,4 +1,4 @@
-import defToMySQL as dtm
+from testold import defToMySQL as dtm
 
 obj=dtm.SaveToMySQL()
 obj.stockNumAndDate()
