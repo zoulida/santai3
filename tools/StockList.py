@@ -2,7 +2,7 @@ __author__ = 'zoulida'
 
 import tushare as ts
 import pandas as pd
-from santai3.tools.LogTools import Logger
+from santai3.tools.LogTools import Logger #注意可以.LogTools import Logger相对路径更为简洁一些
 logger = Logger(logName='log.txt', logLevel="DEBUG", logger="logTest.py").getlog()
 def get_all_stock2():
     import santai3.tools.platformPrint as pp

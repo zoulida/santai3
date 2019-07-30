@@ -128,7 +128,7 @@ if __name__ == '__main__':
     #codelist = getStockList()
 
     #code = ""
-    dateDay = '2017-09-05'
+    dateDay = '2017-09-06'
     #getGreaterThanList(codelist, dateDay)
     listResult = getGreaterThanList(dateDay)
     #listResult = getGreaterThanList(dateDay , percentage)
