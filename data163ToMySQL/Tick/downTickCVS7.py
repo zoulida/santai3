@@ -172,7 +172,7 @@ def main():
     import datetime
     today=datetime.date.today()
     yestoday = today + datetime.timedelta(days=-1)
-    z30daysago = yestoday + datetime.timedelta(days=-30)
+    z30daysago = yestoday + datetime.timedelta(days=-60)#更改为两月了
     #dates = get_date_list(datetime.date(2018, 6, 30), datetime.date(2018, 7, 16))
     dates = get_date_list(z30daysago, yestoday)
     #stocks = get_all_stock_id()
