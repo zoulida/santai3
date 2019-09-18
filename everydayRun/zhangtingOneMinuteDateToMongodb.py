@@ -51,7 +51,8 @@ class ZhangtingDietingData:#存储温度计数据，每分钟都有更新：1）
         jsonTimelast = {"time":timelast} #'2019-06-05 10:25:21'
         print('网页获取时间为：')
         print(jsonTimelast)
-        result = wendujiMongodb.find(jsonTimelast)
+        result = wendujiMongodb.find(jsonTimelast) #这个还有带改进，要判断日期。
+        #todo fix
         #print(result.count())
         if(result.count() == 0):
             print('尚未在数据库插入该条数据，开始插入')

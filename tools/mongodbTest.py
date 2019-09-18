@@ -36,7 +36,7 @@ users=[{"name":"zhangsan","age":18},{"name":"lisi","age":20}]
 #    print(i)
 print(my_set.count())
 for i in my_set.find():
-    print(i)
+    print(i['time'])
 #print(my_set.find_one({"name":"zhangsan"}))
 
 #wenduji.remove()#全部删除

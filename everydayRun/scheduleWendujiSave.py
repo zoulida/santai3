@@ -87,7 +87,7 @@ def run():
 
             # 到达设定时间，结束内循环
             h = 20
-            m = 7
+            m = 24
             # s = 10
             # if now.second <= s:
             #     break
