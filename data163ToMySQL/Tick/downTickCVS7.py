@@ -52,7 +52,7 @@ def get_save_tick_data(symbol, date, name):
 
             except IOError as msg:
                 logger.info (str(msg))#.decode('UTF-8'))
-                sleep_time=min(sleep_time*2, 128)#每次下载失败后sleep_time翻倍，但是最大128s
+                sleep_time=min(sleep_time*2, 128)#每次下载失败后sleep_time翻倍，但是最大128s #这里面乘法完毕没有赋值。
                 logger.info ('Get tick data error: symbol: '+ symbol + ', date: '+str_date+', sleep time is: '+str(sleep_time))
                 import data163ToMySQL.Tick.logErrorToMySQL as em
                 em.ErrortoDataBase(symbol, str_date, name)
@@ -172,7 +172,7 @@ def main():
     import datetime
     today=datetime.date.today()
     yestoday = today + datetime.timedelta(days=-1)
-    z30daysago = yestoday + datetime.timedelta(days=-60)#更改为两月了
+    z30daysago = yestoday + datetime.timedelta(days=-30)#更改为两月了
     #dates = get_date_list(datetime.date(2018, 6, 30), datetime.date(2018, 7, 16))
     dates = get_date_list(z30daysago, yestoday)
     #stocks = get_all_stock_id()
