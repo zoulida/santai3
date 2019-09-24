@@ -46,4 +46,7 @@ df.to_sql('stock_index_daily',engine,if_exists='append')'''
 
 
 df = ts.get_realtime_quotes('000581')
+#print(df)
+
+df = pro.daily(ts_code='000001.SZ', start_date='20180701', end_date='20180718')
 print(df)
