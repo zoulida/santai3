@@ -31,5 +31,5 @@ def get_all_stock2():
     finally:
         ks = normal_stocks
 
-    print(ks)
+    #print(ks)
     return ks
