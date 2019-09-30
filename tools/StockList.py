@@ -33,3 +33,6 @@ def get_all_stock2():
 
     #print(ks)
     return ks
+
+if __name__ == '__main__':
+    get_all_stock2()
