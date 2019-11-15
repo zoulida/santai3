@@ -186,7 +186,9 @@ def main():
     logging.debug('开始爬取数据。Getting Stock data from 163.')
 
     # 爬取程序，每天存储一个文件夹。
-    filepath = 'd:\\data\\'  # 定义数据文件保存路径
+    from ConstConfig import FILEPATH
+    filepath = FILEPATH.DayDataDIRwin.value
+    #filepath = 'd:\\data\\'  # 定义数据文件保存路径
     import datetime
     delta = datetime.timedelta(days=0)
     today = datetime.date.today() - delta

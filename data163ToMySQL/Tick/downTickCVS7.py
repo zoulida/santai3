@@ -8,7 +8,9 @@ import os
 import traceback
 import logging
 
-data_dir = 'E:\\stock_data\\tick_CVS_data\\'  # 下载数据的存放路径
+from ConstConfig import FILEPATH
+#data_dir = 'E:\\stock_data\\tick_CVS_data\\'  # 下载数据的存放路径
+data_dir = FILEPATH.TickDataDIRwin.value  # 下载数据的存放路径
 
 # ts.get_sz50s() #获取上证50成份股  返回值为DataFrame：code股票代码 name股票名称
 

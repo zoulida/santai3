@@ -7,7 +7,7 @@ from memory_profiler import profile
 
 logger = Logger(logName='log.txt', logLevel="DEBUG", logger="logTest.py").getlog()
 
-@profile
+#@profile
 def get_all_stock2():
     import tools.platformPrint as pp
     import tools.mkdir as mkdir
