@@ -325,11 +325,12 @@ class GetZDT:
 
     def zdtStock5Days(self):  # 每天执行
         import tools.timeTools as timeTools
-        startDayStr, endDayStr = timeTools.getDayStr(60)#多少天
+        startDayStr, endDayStr = timeTools.getDayStr(5)#多少天
 
         #startDayStr = ''
         #endDayStr = ''
         dayslist = timeTools.dateRange(startDayStr, endDayStr)
+        #print(dayslist)
         for oneday in dayslist:
             self.zhangtingStockProcess(oneday)
             self.dietingStockProcess(oneday)
