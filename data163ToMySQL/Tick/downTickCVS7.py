@@ -8,13 +8,21 @@ import os
 import traceback
 import logging
 
+#前置必备代码
+import sys
+import os
+print( "当前工作路径",os.getcwd())
+sys.path.append(os.getcwd())
+#print(sys.path)
+
 from ConstConfig import FILEPATH
 #data_dir = 'E:\\stock_data\\tick_CVS_data\\'  # 下载数据的存放路径
 data_dir = FILEPATH.TickDataDIRwin.value  # 下载数据的存放路径
 
 # ts.get_sz50s() #获取上证50成份股  返回值为DataFrame：code股票代码 name股票名称
 
-cal_dates = ts.trade_cal()  # 返回交易所日历，类型为DataFrame, calendarDate  isOpen
+import tools.tusharePro as tp
+#cal_dates = tp.getCal_dates()  # 返回交易所日历，类型为DataFrame, calendarDate  isOpen
 
 
 # 本地实现判断市场开市函数
@@ -23,9 +31,11 @@ cal_dates = ts.trade_cal()  # 返回交易所日历，类型为DataFrame, calend
 
 def is_open_day(date):
     #print(cal_dates[cal_dates['calendarDate'] == date])
-    if date in cal_dates['calendarDate'].values:
-        return cal_dates[cal_dates['calendarDate'] == date].iat[0, 1] == 1
-    return False
+    #if date in cal_dates['calendarDate'].values:
+    #    return cal_dates[cal_dates['calendarDate'] == date].iat[0, 1] == 1
+    strr = date.replace("-","")
+    bl = tp.is_open_day(strr)
+    return bl
 
 #dateend=datetime.date.today()
 #print(is_open_day(dateend.strftime('%Y-%m-%d')))
@@ -191,4 +201,5 @@ def main():
                 time.sleep(sleep_time)
 
 if __name__ == "__main__":
+
     main()
