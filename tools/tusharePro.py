@@ -1,10 +1,12 @@
 __author__ = 'zoulida'
+from functools import lru_cache
 
 def getPro():
     import tushare as ts
     pro = ts.pro_api('69d6b836725cd75df21b39873603b14fed58d101bc033b991b51eb41')
     return pro
 
+@lru_cache()
 def getCal_dates():#获取交易日历
     pro = getPro()
 
