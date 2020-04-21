@@ -43,7 +43,7 @@ def is_open_day(date):
 #从TuShare获取tick data数据并保存到本地
 #@symbol: str类型股票代码 eg.600030
 #@date: date类型日期
-def get_save_tick_data(symbol, date, name):
+def get_save_tick_data(symbol = '600030', date = '2020-04-08', name = 'tiaoshi'):
     logger.info("开始下载%s,%s,%s"%(symbol, date, name))
     #print(date,symbol)
     global sleep_time,data_dir
@@ -57,7 +57,7 @@ def get_save_tick_data(symbol, date, name):
             os.makedirs(dir)
         if not os.path.exists(file):
             try:
-                df=ts.get_tick_data(symbol,str_date,pause=0.1,src='tt')
+                df=ts.get_tick_data(symbol,str_date,pause=0.1,src='nt')
                 #print(df.empty)
                 if df is None:
                     raise IOError('下载的df为空')
@@ -184,7 +184,7 @@ def main():
     import datetime
     today=datetime.date.today()
     yestoday = today + datetime.timedelta(days=-1)
-    z30daysago = yestoday + datetime.timedelta(days=-30)#更改为两月了
+    z30daysago = yestoday + datetime.timedelta(days=-14)#更改为两月了
     #dates = get_date_list(datetime.date(2018, 6, 30), datetime.date(2018, 7, 16))
     dates = get_date_list(z30daysago, yestoday)
     #stocks = get_all_stock_id()
@@ -203,3 +203,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+    #get_save_tick_data()
