@@ -11,6 +11,7 @@ def getCal_dates():#获取交易日历
     pro = getPro()
 
     cal_dates2 = pro.trade_cal(exchange='')
+    #cal_dates2 = pro.query('trade_cal')
     #print(cal_dates2)
 
     return cal_dates2

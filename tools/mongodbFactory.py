@@ -2,7 +2,7 @@ __author__ = 'zoulida'
 
 from pymongo import MongoClient
 
-conn = MongoClient('202.194.246.155', 27017)
+conn = MongoClient('192.168.1.104', 27017)
 db = conn.mydb  #连接mydb数据库，没有则自动创建
 
 def getClient():
