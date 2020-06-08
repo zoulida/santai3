@@ -57,7 +57,7 @@ def get_save_tick_data(symbol = '600030', date = '2020-04-08', name = 'tiaoshi')
             os.makedirs(dir)
         if not os.path.exists(file):
             try:
-                df=ts.get_tick_data(symbol,str_date,pause=0.1,src='nt')
+                df=ts.get_tick_data(symbol,str_date,pause=0.1,src='tt')#数据源代码只能输入sn,tt,nt其中之一
                 #print(df.empty)
                 if df is None:
                     raise IOError('下载的df为空')
@@ -184,7 +184,7 @@ def main():
     import datetime
     today=datetime.date.today()
     yestoday = today + datetime.timedelta(days=-1)
-    z30daysago = yestoday + datetime.timedelta(days=-14)#更改为两月了
+    z30daysago = yestoday + datetime.timedelta(days=-30)#更改为两月了
     #dates = get_date_list(datetime.date(2018, 6, 30), datetime.date(2018, 7, 16))
     dates = get_date_list(z30daysago, yestoday)
     #stocks = get_all_stock_id()
