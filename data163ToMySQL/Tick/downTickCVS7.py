@@ -197,7 +197,7 @@ def main():
         #logging.debug("%s,%s" %(getattr(row, "Index"), getattr(row, "name")))
         for date in dates:
             #print(date)
-            if get_save_tick_data(getattr(row, "Index"), date, getattr(row, "name")):
+            if get_save_tick_data(getattr(row, "symbol"), date, getattr(row, "name")):
                 time.sleep(sleep_time)
 
 if __name__ == "__main__":
